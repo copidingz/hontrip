@@ -4,4 +4,8 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class MateController {
+
+    public void insert(){
+        System.out.println("안녕하세요");
+    }
 }
