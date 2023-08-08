@@ -1,11 +1,13 @@
 package com.multi.hontrip.user.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class UserController {
 
-    public void home(){
-        System.out.println("user");
+    @RequestMapping("/users")
+    public String home(){
+        return "user/home";
     }
 }
