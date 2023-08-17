@@ -28,7 +28,6 @@ public class MateController {
         List<MateBoardListDTO> list = mateService.list(pagedDTO);
         //지역 리스트 가져오기
         List<LocationDTO> location = mateService.location();
-
         session.setAttribute("user_id", 1L);
         session.setAttribute("nickname", "Alice");
         model.addAttribute("location", location);

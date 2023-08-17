@@ -13,5 +13,6 @@ public class MateCommentDTO {
     private String indentationNumber;
     private String createdAt;
     private String updatedAt;
+
     private String nickname;
 }
