@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:forEach items="${list}" var="flight">
@@ -32,12 +31,12 @@
                 </div>
                 <div class="col-md-4">
                     <div class="d-flex flex-column align-items-center float-end">
-                        <button type="button" id="book-btn" name="book-btn"
-                                class="btn btn-outline-yellow">
+                        <button type="button"
+                                class="btn btn-outline-orange">
                             예매하기
                         </button>
-                        <button type="button" id="add-btn" name="add-btn"
-                                class="btn btn-custom1 mt-1 text-white">
+                        <button type="button"
+                                class="btn btn-orange mt-1 text-white">
                             추가하기
                         </button>
                     </div>

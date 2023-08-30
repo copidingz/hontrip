@@ -31,6 +31,12 @@ public class MateServiceImpl implements MateService {
         return mateDAO.list(matePageDTO);
     }
 
+    @Override
+    public List<MateBoardListDTO> regionList(MatePageDTO matePageDTO){
+        matePageDTO.setStartEnd(matePageDTO.getPage());
+        return mateDAO.regionList(matePageDTO);
+    }
+
     public MateBoardListDTO one(long mateBoardId) {
         return mateDAO.one(mateBoardId);
     }
@@ -65,6 +71,7 @@ public class MateServiceImpl implements MateService {
         //1page당 5개의 게시물을 넣는 경우
         //페이지 수 게산
         matePageDTO.setPages(count);
+
         return matePageDTO;
     }
 
@@ -82,7 +89,6 @@ public class MateServiceImpl implements MateService {
         String savedFileName = file.getOriginalFilename();
         mateBoardInsertDTO.setThumbnail(savedFileName);
         String uploadPath = servletContext.getRealPath("/") + relativePath + savedFileName;
-        System.out.println("업로드 경로:" + uploadPath);
         File target = new File(uploadPath);
         try {
             file.transferTo(target);
@@ -127,6 +133,10 @@ public class MateServiceImpl implements MateService {
         return reCommentList;
     }
 
+    public int commentCount(long mateBoardId){
+        return mateCommentDAO.commentCount(mateBoardId);
+    }
+
     @Override
     public int updateMateBoard(MateBoardInsertDTO mateBoardInsertDTO) {
         return mateDAO.updateMateBoard(mateBoardInsertDTO);
@@ -145,11 +155,6 @@ public class MateServiceImpl implements MateService {
         return mateDAO.findUserGenderAgeById(id);
     }
 
-    //동행 신청 메세지 전송하기
-    @Override
-    public int insertMatchingAlarm(MateMatchingAlarmDTO mateMatchingAlarmDTO) {
-        return mateDAO.insertMatchingAlarm(mateMatchingAlarmDTO);
-    }
 
     //유저가 동행인 신청을 했는지 확인
     @Override

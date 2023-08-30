@@ -5,12 +5,12 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class PlanDTO {
 
-    private Long id; // 여행 일정 id
+    private Long planId; // 여행 일정 id
 
     private Long userId; // 사용자 id
 
@@ -18,11 +18,11 @@ public class PlanDTO {
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date startDate; // 일정 시작일
+    private LocalDate startDate; // 일정 시작일
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date endDate; // 일정 종료일
+    private LocalDate endDate; // 일정 종료일
 
     private String memo; // 일정 메모
 
@@ -33,5 +33,4 @@ public class PlanDTO {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updatedAt; // 일정 수정일시
-
 }
