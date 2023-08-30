@@ -24,8 +24,6 @@
         <typeAlias type="com.multi.hontrip.mate.dto.UserGenderAgeDTO" alias="userGenderAgeDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.MateBoardSelectOneDTO" alias="mateBoardSelectOneDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.MateMatchingAlarmDTO" alias="mateMatchingAlarmDTO"></typeAlias>
-        <typeAlias type="com.multi.hontrip.mate.dto.AlarmPageDTO" alias="alarmPageDTO"></typeAlias>
-        <typeAlias type="com.multi.hontrip.mate.dto.AlarmPaginationDTO" alias="alarmPaginationDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.MateDTO" alias="mateDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.MateBoardListDTO" alias="mateBoardListDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.MatePageDTO" alias="matePageDTO"></typeAlias>
@@ -38,8 +36,6 @@
         <typeAlias type="com.multi.hontrip.user.dto.UserDTO" alias="userDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.user.dto.UserInsertDTO" alias="userInsertDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.user.dto.WithdrawUserDTO" alias="withdrawUserDTO"></typeAlias>
-        <typeAlias type="com.multi.hontrip.user.dto.UserSocialInfoDTO" alias="userSocialInfoDTO"></typeAlias>
-        <typeAlias type="com.multi.hontrip.user.dto.MyRecordDTO" alias="myRecordDTO"></typeAlias>
 
         <!--record-->
         <typeAlias type="com.multi.hontrip.record.dto.CreatePostDTO" alias="createPostDTO"></typeAlias>
@@ -47,7 +43,6 @@
         <typeAlias type="com.multi.hontrip.record.dto.CommentDTO" alias="commentDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.record.dto.LocationDTO" alias="locationDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.record.dto.PostImgDTO" alias="postImgDTO"></typeAlias>
-        <typeAlias type="com.multi.hontrip.record.dto.PostLikeDTO" alias="postLikeDTO"></typeAlias>
     </typeAliases>
 
     <typeHandlers>
@@ -55,7 +50,6 @@
         <typeHandler handler="com.multi.hontrip.mate.dto.RegionTypeHandler"/>
         <typeHandler handler="com.multi.hontrip.mate.dto.AgeRangeTypeHandler"/>
         <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler"/>
-        <typeHandler handler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
     </typeHandlers>
 
     <mappers>
@@ -72,7 +66,6 @@
         <mapper resource="mapper/chatMapper.xml"/>
         <!-- user -->
         <mapper resource="mapper/userMapper.xml"/>
-        <mapper resource="mapper/myPageMapper.xml"/>
         <!-- record -->
         <mapper resource="mapper/recordMapper.xml"/>
     </mappers>

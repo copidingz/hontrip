@@ -5,8 +5,6 @@ import com.multi.hontrip.plan.dto.AccommodationDTO;
 import java.util.List;
 
 public interface AccommodationService {
-
-    void fetchAndSaveAccommodationData(String x, String y, int radius);
     AccommodationDTO one(Long accommodationId); // id별 숙박시설 하나
     List<AccommodationDTO> list(); // 숙박시설 리스트
     List<AccommodationDTO> filterByAddress(String addressName); // 숙박시설 주소 필터
@@ -20,7 +18,6 @@ public interface AccommodationService {
 
     List<AccommodationDTO> filterByCategoryAndPlaceNameAndAddress(String addressName, String categoryName, String placeName); // 숙박시설 주소|카테고리 필터
 */
-
 
 
 }

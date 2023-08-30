@@ -15,51 +15,10 @@
   font-family: '맑은 고딕','Malgun Gothic',나눔고딕,돋움,Dotum,굴림,Gulim,'Apple SD Gothic Neo',sans-serif !important;
 }
 .color-red{
-  color: #FF5A46;
-}
-
-.main-color{
-  color: #FF5A46;
+  color: #FF9F1C;
 }
 
 .vertical-center {
   display: flex !important;
   align-items: center !important;
-}
-
-.my-card {
-  padding: 10px;
-}
-
-.btn-main {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #FF5A46;
-  --bs-btn-border-color: #FF5A46;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #FF5A46;
-  --bs-btn-hover-border-color: #FF5A46;
-  --bs-btn-focus-shadow-rgb: 92,140,229;
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #FF5A46;
-  --bs-btn-active-border-color: #FF5A46;
-  --bs-btn-active-shadow: 0rem 0.25rem 0.75rem rgba(30, 34, 40, 0.15);
-  --bs-btn-disabled-color: #fff;
-  --bs-btn-disabled-bg: #FF5A46;
-  --bs-btn-disabled-border-color: #FF5A46;
-}
-
-.show-sort{
-  display: block;
-}
-
-.hidden-sort{
-  display: none;
-}
-
-.sort-active{
-  text-decoration: underline;
-}
-
-.bg-main-light{
-  background: rgba(255,90,70,0.3);
 }

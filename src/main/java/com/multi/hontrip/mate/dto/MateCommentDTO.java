@@ -14,5 +14,4 @@ public class MateCommentDTO {
     private String createdAt;
     private String updatedAt;
     private String nickname;
-    private String profileImage;
 }

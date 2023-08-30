@@ -47,8 +47,8 @@
                         <td>${spot.homepage}</td>
                     </tr>
                     <tr>
-                        <th scope="row">이용 시간</th>
-                        <td>${spot.usetime}</td>
+                        <th scope="row">개장일</th>
+                        <td>${spot.openDate}</td>
                     </tr>
                     <tr>
                         <th scope="row">휴일</th>
@@ -70,6 +70,10 @@
                         <td>${spot.expguide}</td>
                     </tr>
                     <tr>
+                        <th scope="row">이용 시간</th>
+                        <td>${spot.usetime}</td>
+                    </tr>
+                    <tr>
                         <th scope="row">주차 시설</th>
                         <td>${spot.parking}</td>
                     </tr>
@@ -84,6 +88,7 @@
     $("#go-to-list").click(function () {
         location.href="${path}/plan/spot/search?category=${category}&keyword=${keyword}";
     })
+
 
     <%--$(document).ready(function () {--%>
     <%--    $("#go-to-list").click(function () {--%>

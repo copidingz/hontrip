@@ -29,10 +29,6 @@ public class CommentDAO {
         sqlSessionTemplate.delete("record.deleteComment", id);
     }
 
-    public void deleteReComment(Long id) {
-        sqlSessionTemplate.delete("record.deleteReComment", id);
-    }
-
     public void updateComment(CommentDTO commentDTO) {
         sqlSessionTemplate.update("record.updateComment", commentDTO);
     }

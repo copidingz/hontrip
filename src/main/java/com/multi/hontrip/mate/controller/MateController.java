@@ -2,7 +2,6 @@ package com.multi.hontrip.mate.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.multi.hontrip.common.RequiredSessionCheck;
 import com.multi.hontrip.mate.dto.*;
 import com.multi.hontrip.mate.service.MateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class MateController {
     private MateService mateService;
 
     // 게시판 목록 가져오기
-    @GetMapping("/bbs_list")
+    @GetMapping("bbs_list")
     public String list(MatePageDTO matePageDTO, Model model, HttpSession session) {
         //페이징 변수들 계산하기
         MatePageDTO pagedDTO = mateService.paging(matePageDTO);
@@ -37,6 +36,8 @@ public class MateController {
         //지역 리스트 가져오기
         List<LocationDTO> location = mateService.location();
 
+        session.setAttribute("user_id", 1L);
+        session.setAttribute("nickname", "Alice");
         model.addAttribute("location", location);
 
         model.addAttribute("list", list);
@@ -46,49 +47,34 @@ public class MateController {
     }
 
     //페이징 처리
-    @GetMapping("/pagination")
-    @ResponseBody
-    public Map<String, Object> pageList(MatePageDTO matePageDTO, HttpSession session) {
+    @RequestMapping("pagination")
+    public @ResponseBody Map<String, Object> pageList(MatePageDTO matePageDTO, Model model, HttpSession session) {
         //페이징 변수들 계산하기
         MatePageDTO pagedDTO = mateService.paging(matePageDTO);
         //게시물 리스트 가져오기
         List<MateBoardListDTO> list = mateService.list(pagedDTO);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("list", list);
-        map.put("pageDTO", pagedDTO);
-        return map;
-    }
-
-    @RequestMapping("/region_search")
-    @ResponseBody
-    public Map<String, Object> regionList(MatePageDTO matePageDTO, HttpSession session) {
-        //페이징 변수들 계산하기
-        MatePageDTO pagedDTO = mateService.paging(matePageDTO);
-        //게시물 리스트 가져오기
-        List<MateBoardListDTO> list = mateService.regionList(pagedDTO);
+        model.addAttribute("list", list);
+        session.setAttribute("pageDTO", pagedDTO);
 
         Map<String, Object> map = new HashMap<>();
         map.put("list", list);
         map.put("pageDTO", pagedDTO);
         return map;
     }
+
 
     //댓글 insert
     @RequestMapping("comment_insert")
     @ResponseBody
-    @RequiredSessionCheck
-    public Map<String,Object> insert(MateCommentDTO mateCommentDTO, HttpSession httpSession) {
+    public Map<String,Object> insert(MateCommentDTO mateCommentDTO) {
         int result = mateService.commentInsert(mateCommentDTO);
         //게시물 상세의 댓글 리스트 가져오기
         List<MateCommentDTO> list = mateService.commentList(mateCommentDTO.getMateBoardId());
         //게시물 상세의 답글 리스트 가져오기
         List<MateCommentDTO> reCommentList = mateService.reCommentList(list);
-        //게시물 상세의 댓글 개수 카운트 하기
-        int commentListCount = mateService.commentCount(mateCommentDTO.getMateBoardId());
 
         Map<String,Object> map=new HashMap<>();
-        map.put("commentListCount", commentListCount);
         map.put("list", list);
         map.put("reCommentList", reCommentList);
         return map;
@@ -97,18 +83,14 @@ public class MateController {
     //댓글 delete
     @RequestMapping("comment_edit")
     @ResponseBody
-    @RequiredSessionCheck
     public Map<String,Object> edit(MateCommentDTO mateCommentDTO) {
         mateService.commentEdit(mateCommentDTO);
         //게시물 상세의 댓글 리스트 가져오기
         List<MateCommentDTO> list = mateService.commentList(mateCommentDTO.getMateBoardId());
         //게시물 상세의 답글 리스트 가져오기
         List<MateCommentDTO> reCommentList = mateService.reCommentList(list);
-        //게시물 상세의 댓글 개수 카운트 하기
-        int commentListCount = mateService.commentCount(mateCommentDTO.getMateBoardId());
 
         Map<String,Object> map=new HashMap<>();
-        map.put("commentListCount", commentListCount);
         map.put("list", list);
         map.put("reCommentList", reCommentList);
         return map;
@@ -116,18 +98,14 @@ public class MateController {
 
     @RequestMapping("comment_delete")
     @ResponseBody
-    @RequiredSessionCheck
     public Map<String,Object> delete(MateCommentDTO mateCommentDTO) {
         mateService.commentDelete(mateCommentDTO);
         //게시물 상세의 댓글 리스트 가져오기
         List<MateCommentDTO> list = mateService.commentList(mateCommentDTO.getMateBoardId());
         //게시물 상세의 답글 리스트 가져오기
         List<MateCommentDTO> reCommentList = mateService.reCommentList(list);
-        //게시물 상세의 댓글 개수 카운트 하기
-        int commentListCount = mateService.commentCount(mateCommentDTO.getMateBoardId());
 
         Map<String,Object> map=new HashMap<>();
-        map.put("commentListCount", commentListCount);
         map.put("list", list);
         map.put("reCommentList", reCommentList);
         return map;
@@ -135,18 +113,14 @@ public class MateController {
 
     @RequestMapping("reply_insert")
     @ResponseBody
-    @RequiredSessionCheck
     public Map<String,Object> reply(MateCommentDTO mateCommentDTO) {
         int result = mateService.replyInsert(mateCommentDTO);
         //게시물 상세의 댓글 리스트 가져오기
         List<MateCommentDTO> list = mateService.commentList(mateCommentDTO.getMateBoardId());
         //게시물 상세의 답글 리스트 가져오기
         List<MateCommentDTO> reCommentList = mateService.reCommentList(list);
-        //게시물 상세의 댓글 개수 카운트 하기
-        int commentListCount = mateService.commentCount(mateCommentDTO.getMateBoardId());
 
         Map<String,Object> map=new HashMap<>();
-        map.put("commentListCount", commentListCount);
         map.put("list", list);
         map.put("reCommentList", reCommentList);
         return map;
@@ -154,8 +128,10 @@ public class MateController {
 
     /* 동행인게시판 글 작성 get 매핑*/
     @GetMapping("/insert")
-    @RequiredSessionCheck
     public String insert(HttpSession session) {
+        if (session.getAttribute("id") == null) {
+            return "error";
+        }
         return "/mate/mate_board_insert";
     }
 
@@ -180,10 +156,6 @@ public class MateController {
         List<MateCommentDTO> list = mateService.commentList(id);
         //게시물 상세의 답글 리스트 가져오기
         List<MateCommentDTO> reCommentList = mateService.reCommentList(list);
-        //게시물 상세의 댓글 개수 카운트 하기
-        int commentListCount = mateService.commentCount(id);
-
-        model.addAttribute("commentListCount", commentListCount);
         model.addAttribute("list", list);
         model.addAttribute("reCommentList", reCommentList);
         model.addAttribute("dto", mateBoardSelectOneDTO);
@@ -234,6 +206,24 @@ public class MateController {
         return "redirect:/mate/" + mateBoardInsertDTO.getId();
     }
 
+
+    //return값이 필요한 이유 -> ajax에서 불렀을때 리턴값이 없으면 404뜸
+    @PostMapping("insertMatchingAlarm")
+    @ResponseBody
+    public int insertMatchingAlarm(MateMatchingAlarmDTO mateMatchingAlarmDTO) {
+
+        /*MateApplicationNotificationDTO mateApplicationNotificationDTO = MateApplicationNotificationDTO.builder()
+                .content("같이 여행갑시다!!")
+                .isRead(false)
+                .mateBoardURL("http://localhost:8080/hontrip/mate/262")
+                .senderId(4)
+                .receiverId(1)
+                .id(7)
+                .build();
+
+        notificationService.send(mateApplicationNotificationDTO);*/
+        return mateService.insertMatchingAlarm(mateMatchingAlarmDTO);
+    }
 
     /* 동행 신청자의 신청 여부를 확인*/
     @GetMapping("checkApply")

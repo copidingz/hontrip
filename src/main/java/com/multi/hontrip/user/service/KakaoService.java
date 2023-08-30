@@ -2,7 +2,6 @@ package com.multi.hontrip.user.service;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.multi.hontrip.user.dto.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,16 +42,17 @@ public class KakaoService implements OauthService { //카카오 oauth 인증 처
 
     @Override
     public String getLoginUrl() {//카카오 인가코드 발급 url
-        return KAKAO_AUTH_URL + "/oauth/authorize"
+        String kakaoAuthUri = KAKAO_AUTH_URL + "/oauth/authorize"
                 + "?client_id=" + KAKAO_CLIENT_ID
                 + "&redirect_uri=" + KAKAO_REDIRECT_URL
                 + "&response_type=code";
+        return kakaoAuthUri;
     }
 
     @Override
     public UserInsertDTO getOauthInfo(String code, String state) {  //인증 코드로 접근 토근 받기, POST요청
         if (code == null) throw new RuntimeException("인증코드가 없습니다.");
-        OauthTokenDTO tokenDTO;   // 인증 시도 후 반환받을 값
+        OauthTokenDTO tokenDTO = null;   // 인증 시도 후 반환받을 값
 
         try {
             //헤더 Object생성 - Content-type: application/x-www-form-urlencoded;charset=utf-8
@@ -60,7 +60,7 @@ public class KakaoService implements OauthService { //카카오 oauth 인증 처
             httpHeaders.add("Content-type", "application/x-www-form-urlencoded");
 
             //body Object생성
-            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
             params.add("grant_type", "authorization_code");
             params.add("client_id", KAKAO_CLIENT_ID);
             params.add("client_secret", KAKAO_CLIENT_SECRET);
@@ -68,7 +68,7 @@ public class KakaoService implements OauthService { //카카오 oauth 인증 처
             params.add("redirect_uri", KAKAO_REDIRECT_URL);
 
             //헤더와 바디를 하나의 오브젝트에 담기
-            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, httpHeaders);
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<MultiValueMap<String, String>>(params, httpHeaders);
 
             // HTTP 요청하기  - Post방식 , 그리고 response 응답받기
             RestTemplate restTemplate = new RestTemplate();
@@ -87,9 +87,7 @@ public class KakaoService implements OauthService { //카카오 oauth 인증 처
             throw new RuntimeException(e.getMessage());
         }
 
-        UserInsertDTO userInsertDTO = getUserInfoWithToken(tokenDTO);   //토큰 정보로 반환할 User 정보 셋팅
-        userInsertDTO.setState(state.equals("reAccessTerms") ? "reAccessTerms" : "none");      // state값으로 해당 값 셋팅
-        return userInsertDTO;
+        return getUserInfoWithToken(tokenDTO);
     }
 
     @Override
@@ -113,6 +111,7 @@ public class KakaoService implements OauthService { //카카오 oauth 인증 처
         );
 
         return jsonConverToDTO(response, tokenDTO);
+
     }
 
     @Override
@@ -130,12 +129,12 @@ public class KakaoService implements OauthService { //카카오 oauth 인증 처
         httpHeaders.add("Authorization", "KakaoAK "+KAKAO_ADMIN_KEY);
 
         //body Object생성
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("target_id_type","user_id");
         params.add("target_id",withdrawUserDTO.getSocialId());
 
         //헤더와 바디를 하나의 오브젝트에 담기
-        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, httpHeaders);
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<MultiValueMap<String, String>>(params, httpHeaders);
 
         // HTTP 요청하기  - Post방식 , 그리고 response 응답받기
         RestTemplate restTemplate = new RestTemplate();
@@ -157,44 +156,16 @@ public class KakaoService implements OauthService { //카카오 oauth 인증 처
         }
     }
 
-    @Override
-    public String reAcceptTerms(UserSocialInfoDTO userSocialInfoDTO) { //다시 동의받기
-        // 탈퇴처리
-        String result = quiteSicalOauth(WithdrawUserDTO.convertFromUserSocialDTO(userSocialInfoDTO));
-        if(result.equals("success")){  // 다시 회원가입 처리
-            return getLoginUrl()+"&state=reAccessTerms";
-        }else{
-            throw new RuntimeException("탈퇴 안됨");
-        }
-    }
-
-    @Override
-    public UserInsertDTO refreshUserInfo(UserSocialInfoDTO userSocialInfo) {
-        OauthTokenDTO tokenDTO = OauthTokenDTO.builder()
-                .tokenType("Bearer")
-                .accessToken(userSocialInfo.getAccessToken())
-                .build();
-        UserInsertDTO userInsertDTO = getUserInfoWithToken(tokenDTO);
-        userInsertDTO.setExpiresAt(userSocialInfo.getExpiresAt());
-        userInsertDTO.setRefreshTokenExpiresAt(userSocialInfo.getRefreshTokenExpiresAt());
-        return userInsertDTO;
-    }
-
     private UserInsertDTO jsonConverToDTO(ResponseEntity<String> response, OauthTokenDTO tokenDTO) {
         //json 파싱
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(response.getBody());
-
-        //비동의 항목 처리
         String socialId = element.getAsJsonObject().get("id").getAsString();
         String nickname = element.getAsJsonObject().getAsJsonObject("properties").get("nickname").getAsString();
         String profileImage = element.getAsJsonObject().getAsJsonObject("properties").get("profile_image").getAsString();
-
-        // 동의 항목 처리
-        JsonObject kakaoAccount = element.getAsJsonObject().getAsJsonObject("kakao_account");
-        int ageRangeId = kakaoAccount.has("age_range") ? getIdFromKakaoAgeRangeString(kakaoAccount.get("age_range").getAsString()) : 1; //사용자 연령대
-        int gender = kakaoAccount.has("gender") ? getGenderIdFromKakaoGender(element.getAsJsonObject().getAsJsonObject("kakao_account").get("gender").getAsString()) : getGenderIdFromKakaoGender("none");  //사용자 성별
-        String email = kakaoAccount.has("email") ? element.getAsJsonObject().getAsJsonObject("kakao_account").get("email").getAsString() : "정보없음";
+        int ageRangeId = getIdFromKakaoAgeRangeString(element.getAsJsonObject().getAsJsonObject("kakao_account").get("age_range").getAsString());
+        int gender = getGenderIdFromKakaoGender(element.getAsJsonObject().getAsJsonObject("kakao_account").get("gender").getAsString());
+        String email = element.getAsJsonObject().getAsJsonObject("kakao_account").get("email").getAsString();
         String connectedAt = element.getAsJsonObject().get("connected_at").getAsString();
         //날짜 적용
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(connectedAt, DateTimeFormatter.ISO_DATE_TIME);
@@ -230,6 +201,9 @@ public class KakaoService implements OauthService { //카카오 oauth 인증 처
         }
     }
     private int getIdFromKakaoAgeRangeString(String value) { //연령대 변환
+        if (value == null) {
+            return AgeRange.AGE_UNKNOWN.getId();
+        }
         try {
             int age = Integer.parseInt(value.split("~")[0]);
             if (age >= 1 && age <= 9) {

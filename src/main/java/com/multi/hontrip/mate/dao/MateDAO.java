@@ -5,9 +5,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class MateDAO {
@@ -15,16 +13,8 @@ public class MateDAO {
     SqlSessionTemplate my;
 
     public List<MateBoardListDTO> list(MatePageDTO pageDTO) {
-        Map<String,Object> param = new HashMap<>();
 
-        param.put("searchType",pageDTO.getSearchType());
-        param.put("keyword",pageDTO.getKeyword());
-        param.put("start",pageDTO.getStart());
-        param.put("end",pageDTO.getEnd());
-        param.put("regionId", pageDTO.getRegionId());
-
-        System.out.println("region -> " + pageDTO.getRegionId());
-        return my.selectList("mateBbs.list", param);
+        return my.selectList("mateBbs.list", pageDTO);
     }
 
     public MateBoardListDTO one(long mateBoardId) {
@@ -59,12 +49,14 @@ public class MateDAO {
         return my.selectOne("mateBbs.findUserGenderAgeById", id);
     }
 
-    public int checkApply(MateMatchingAlarmDTO mateMatchingAlarmDTO) {
-        return my.selectOne("mateBbs.checkApply", mateMatchingAlarmDTO);
+    public int insertMatchingAlarm(MateMatchingAlarmDTO mateMatchingAlarmDTO) {
+        return my.insert("mateBbs.insertMateMatchingAlarm", mateMatchingAlarmDTO);
     }
 
-    public List<MateBoardListDTO> regionList(MatePageDTO matePageDTO) {
-        return my.selectList("mateBbs.regionList", matePageDTO);
+    public int checkApply(MateMatchingAlarmDTO mateMatchingAlarmDTO) {
+        int num = my.selectOne("mateBbs.checkApply", mateMatchingAlarmDTO);
+        System.out.println(num);
+        return my.selectOne("mateBbs.checkApply", mateMatchingAlarmDTO);
     }
 
 

@@ -38,16 +38,17 @@ public class NaverService implements OauthService{
     private String NAVER_SSL_API_URL;
 
     public String getLoginUrl() {//네이버 인가코드 발급 url
-        return NAVER_AUTH_URL + "/oauth2.0/authorize"
+        String naverAuthUri = NAVER_AUTH_URL + "/oauth2.0/authorize"
                 + "?response_type=code"
                 + "&client_id=" + NAVER_CLIENT_ID
                 + "&redirect_uri=" + NAVER_REDIRECT_URL
                 + "&&state=" + "hontrip_naver_login";
+        return naverAuthUri;
     }
 
     public UserInsertDTO getOauthInfo(String code, String state) {  //네이버 접근 토큰 발급 요청
         if (code == null) throw new RuntimeException("인증코드가 없습니다.");
-        OauthTokenDTO tokenDTO;   // 인증 시도 후 반환받을 값
+        OauthTokenDTO tokenDTO = null;   // 인증 시도 후 반환받을 값
 
         try {
             //헤더 Object생성 - Content-type: application/x-www-form-urlencoded;charset=utf-8
@@ -55,7 +56,7 @@ public class NaverService implements OauthService{
             httpHeaders.add("Content-type", "application/x-www-form-urlencoded");
 
             //body Object생성
-            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
             params.add("grant_type", "authorization_code");
             params.add("client_id", NAVER_CLIENT_ID);
             params.add("client_secret", NAVER_CLIENT_SECRET);
@@ -63,7 +64,7 @@ public class NaverService implements OauthService{
             params.add("state", state);
 
             //헤더와 바디를 하나의 오브젝트에 담기
-            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, httpHeaders);
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<MultiValueMap<String, String>>(params, httpHeaders);
 
             // HTTP 요청하기  - Post방식 , 그리고 response 응답받기
             RestTemplate restTemplate = new RestTemplate();
@@ -106,7 +107,7 @@ public class NaverService implements OauthService{
     }
 
     public String getLogOutUrl() {  //네이버 로그아웃 url - 네이버는 별도의 로그아웃 처리가 없음
-        return "/user/naver/logout";
+        return "/properties/user/naver/logout";
     }
 
     @Override
@@ -118,7 +119,7 @@ public class NaverService implements OauthService{
         httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
 
         //body Object생성
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("client_id",NAVER_CLIENT_ID);
         params.add("client_secret",NAVER_CLIENT_SECRET);
         params.add("access_token",withdrawUserDTO.getAccessToken());
@@ -126,7 +127,7 @@ public class NaverService implements OauthService{
         params.add("service_provider","NAVER");
 
         //헤더와 바디를 하나의 오브젝트에 담기
-        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, httpHeaders);
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<MultiValueMap<String, String>>(params, httpHeaders);
 
         // HTTP 요청하기  - Post방식 , 그리고 response 응답받기
         RestTemplate restTemplate = new RestTemplate();
@@ -147,23 +148,6 @@ public class NaverService implements OauthService{
         }
 
         return result.equals("success") ? "success" : "fail";
-    }
-
-    @Override
-    public String reAcceptTerms(UserSocialInfoDTO userSocialInfoDTO) {  //인터페이스의 폐해.. 안씀
-        return null;
-    }
-
-    @Override
-    public UserInsertDTO refreshUserInfo(UserSocialInfoDTO userSocialInfo) {  //사용자 정보 갱신
-        OauthTokenDTO tokenDTO = OauthTokenDTO.builder()
-                .tokenType("Bearer")
-                .accessToken(userSocialInfo.getAccessToken())
-                .build();
-        UserInsertDTO userInsertDTO = getUserInfoWithToken(tokenDTO);
-        userInsertDTO.setExpiresAt(userSocialInfo.getExpiresAt());
-        userInsertDTO.setRefreshTokenExpiresAt(userSocialInfo.getRefreshTokenExpiresAt());
-        return userInsertDTO;
     }
 
     private UserInsertDTO jsonConverToDTO(ResponseEntity<String> response,OauthTokenDTO tokenDTO) { // 입력받은 사용자 json정보를 파싱해서 dto에 넣음
@@ -193,7 +177,6 @@ public class NaverService implements OauthService{
                 .refreshToken(tokenDTO.getRefreshToken())
                 .refreshTokenExpiresAt(null)
                 .createdAt(createdAt)
-                .state("none")
                 .build();
     }
 

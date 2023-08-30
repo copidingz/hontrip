@@ -6,13 +6,13 @@
         <form id="spot-list-search-form" action="search" method="post" class="mt-5">
             <div class="custom-form-container">
                 <div class="col-md-2 me-2">
-                    <select class="form-select" id="category" name="category" form="spot-list-search-form" aria-label="검색 범주" style="border: 1px solid rgba(8, 60, 130, 0.2);">
+                    <select class="form-select" id="category" name="category" form="spot-list-search-form" aria-label="검색 범주">
                         <option value="keyword" selected>여행지명</option>
                         <option value="area">지역명</option>
                     </select>
                 </div>
                 <input type="text" id="keyword" name="keyword" class="custom-form-control col-8 me-2">
-                <input type="submit" value="검색" class="btn btn-orange col-md-2">
+                <input type="submit" value="검색" class="btn btn-yellow col-md-2">
             </div>
         </form>
         <div id="spot-list" class="row justify-content-start align-content-center">
@@ -23,7 +23,6 @@
                 </c:if>
             </h3>
             <%--            검색 여행지 목록       --%>
-
             <c:forEach items="${list}" var="spot">
                 <div class="custom-card ms-3 my-2 custom-col-3">
                     <div class="custom-card-body">

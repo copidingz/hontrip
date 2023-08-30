@@ -52,8 +52,3 @@
 	<!-- /.container -->
 </section>
 <!-- /section -->
-<script>
-	<c:if test="${not empty message}">
-		alert('${message}');
-	</c:if>
-</script>

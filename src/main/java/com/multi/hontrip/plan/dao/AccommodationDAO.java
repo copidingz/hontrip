@@ -73,7 +73,4 @@ public class AccommodationDAO {
         return my.selectList("accommodationMapper.searchAccommodationsWithFilter", params);
     }
 
-
-
-
 }

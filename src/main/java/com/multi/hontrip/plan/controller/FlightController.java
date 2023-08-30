@@ -1,10 +1,9 @@
 package com.multi.hontrip.plan.controller;
 
-import com.multi.hontrip.common.RequiredSessionCheck;
 import com.multi.hontrip.plan.dto.FlightDTO;
 import com.multi.hontrip.plan.dto.FlightSearchDTO;
 import com.multi.hontrip.plan.parser.Airport;
-import com.multi.hontrip.plan.service.FlightService;
+import com.multi.hontrip.plan.service.FlightServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +21,9 @@ import java.util.List;
 @RequestMapping("/plan/flight")
 public class FlightController {
 
-    private final FlightService flightService;
+    private final FlightServiceImpl flightService;
     @Autowired
-    public FlightController(FlightService flightService) {
+    public FlightController(FlightServiceImpl flightService) {
         this.flightService = flightService;
     }
 
@@ -69,8 +68,7 @@ public class FlightController {
         flightSearchDTO.setEndRowNum(endRowNum);
         flightSearchDTO.setRowCount(rowCount);
 
-        // DB에서 출발 공항, 도착 공항, 출발일 조건에 맞는 데이터 select
-        List<FlightDTO> FlightList = flightService.listFlightWithScroll(flightSearchDTO);
+        List<FlightDTO> list = flightService.listFlight(flightSearchDTO);
 
         // 검색 대상 항공편 수
         int totalRow = flightService.countFlight(flightSearchDTO);
@@ -80,12 +78,8 @@ public class FlightController {
         model.addAttribute("totalPageCount", totalPageCount);
         model.addAttribute("totalRow", totalRow);
         model.addAttribute("pageNum", pageNum);
-        if(FlightList.isEmpty()){
-            model.addAttribute("message", "검색 결과가 없습니다."); // 검색 데이터 없는 경우 메시지 표시
-        } else {
-            model.addAttribute("list", FlightList);
-        }
-
+        // DB에서 출발 공항, 도착 공항, 출발일 조건에 맞는 데이터 select
+        model.addAttribute("list", list);
         return "/plan/flight/search_list"; // 조건에 맞는 항공편 검색 목록 반환
     }
     
@@ -110,6 +104,7 @@ public class FlightController {
 
         flightSearchDTO.setDepAirportName(depAirportName);
         flightSearchDTO.setArrAirportName(arrAirportName);
+
         flightSearchDTO.setStartRowNum(startRowNum);
         flightSearchDTO.setEndRowNum(endRowNum);
         flightSearchDTO.setRowCount(rowCount);
