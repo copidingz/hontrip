@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%
     long userId = 0;
     if (session.getAttribute("id") != null) {
@@ -12,9 +12,9 @@
 <section class="wrapper bg-light">
     <div class="custom-card container-fluid container p-6 mt-15 mb-20 w-75">
         <div class="row">
-            <h3 class="my-4 col-9 float-start">내 여행 일정 > ${plan.title}</h3>
+            <h2 class="my-4 col-9 float-start">내 여행 일정 > ${plan.title}</h2>
             <div class="col-3 text-end">
-                <button type="button" class="btn btn-outline-gray" style="width: 74%"><a href="list" class="text-black-50">목록</a>
+                <button type="button" class="btn btn-outline-gray" style="width: 74%; border: 1px solid rgba(8, 60, 130, 0.15);"><a href="list" class="text-black-50">목록</a>
                 </button>
             </div>
         </div>
@@ -46,7 +46,7 @@
             </div>
             <hr class="my-8"/>
             <div>
-                <button type="submit" class="btn btn-orange col-2 float-end" form="planForm">수정</button>
+                <button type="submit" class="btn btn-primary col-2 float-end" form="planForm">수정</button>
             </div>
         </form>
 
@@ -269,7 +269,7 @@
                 <div class="row mt-3" id="selected-accommodations-1">
 
                     <c:forEach items="${addedAccommodations}" var="accommodation">
-                        <div class="card my-2">
+                        <div class="card my-2" style="text-align: left; font-size: 0.8em;">
                             <div class='row ms-3 my-4'>
                                     <%--<span class='col-3'><img src="${spot.image}" width="88px" height="72px"></span> --%>
                                 <div class="row">
@@ -323,6 +323,7 @@
                         </button>
 
                     </div>
+
                 </form>
 
                 <div class="search-accommodation-results row" id="search-accommodation-results-1">
@@ -333,6 +334,7 @@
         </div>
         <hr class="my-8"/>
         <%--    container   --%>
+
 </section>
 <script>
     let planId = "${plan.planId}";
@@ -682,6 +684,7 @@
 
             //getAccommodationList(category, address, placeName, btnId);
             //getAccommodationList(category, addressInput, placeNameInput, btnId);
+
             getAccommodationList(addressInput, placeNameInput, btnId);
         });
 
@@ -730,7 +733,6 @@
                 filterType: filter_type
             },
             success: function (data) {
-
                /* console.log("after getAccommodationList ajax succeeded!");
                 console.log("returned getAccommodationList data");
 
@@ -854,7 +856,6 @@
         });
     })
 
-
     /*안전정보 연결*/
     $(document).ready(function () {
         // Load the safety_search.jsp content when the safetyButton is clicked
@@ -902,7 +903,6 @@
             });
         });
     });
-
 
     /*  응급시설*/
     $(document).ready(function () {

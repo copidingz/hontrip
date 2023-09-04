@@ -18,12 +18,14 @@
         <typeAlias type="com.multi.hontrip.plan.dto.EmergencyFacilityDTO" alias="EmergencyFacilityDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.plan.dto.FlightDTO" alias="FlightDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.plan.dto.FlightSearchDTO" alias="FlightSearchDTO"></typeAlias>
+        <typeAlias type="com.multi.hontrip.plan.dto.SpotLikeDTO" alias="SpotLikeDTO"></typeAlias>
 
         <!-- mate -->
         <typeAlias type="com.multi.hontrip.mate.dto.MateBoardInsertDTO" alias="mateBoardInsertDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.UserGenderAgeDTO" alias="userGenderAgeDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.MateBoardSelectOneDTO" alias="mateBoardSelectOneDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.MateMatchingAlarmDTO" alias="mateMatchingAlarmDTO"></typeAlias>
+        <typeAlias type="com.multi.hontrip.mate.dto.ChatOwnerAcceptedDTO" alias="chatOwnerAcceptedDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.AlarmPageDTO" alias="alarmPageDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.AlarmPaginationDTO" alias="alarmPaginationDTO"></typeAlias>
         <typeAlias type="com.multi.hontrip.mate.dto.MateDTO" alias="mateDTO"></typeAlias>

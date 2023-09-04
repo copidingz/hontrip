@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- 공유피드 좋아요 순 버튼 선택 해당 게시물  리스트 -->
-    <div id="feedlist_button_like_section">
+<!-- 공유피드 지역 버튼 선택 시 해당 지역 게시물 리스트 -->
+    <div id="feedlist_location_buttons_section">
       <div class="container">
         <section class="wrapper bg-light">
           <div class="container py-10 py-md-3">
             <div class="row gy-6">
               <div class="row isotope gx-md-8 gy-8 mb-2">
-                <c:forEach items="${feedlist_like}" var="postInfoDTO">
+                <c:forEach items="${feedListButtons}" var="postInfoDTO">
                    <div class="col-md-6 col-lg-4">
                      <article class="item post">
                        <div class="card">
@@ -47,3 +47,4 @@
         </section>
       </div>
     </div>
+
