@@ -104,6 +104,8 @@
     - 각 게시물의 조회 수 표시 및 동행 신청 현황을 게시물에 표시하여 사용자 신청 상태 확인 제공
     - 채팅 목록 select,리로드 추가 및 css
 
+### 채팅
+![채팅](https://github.com/copidingz/hontrip/assets/131745257/768f85e3-aba7-4b9f-8513-fcf5011fa6b2)
 
  
 
